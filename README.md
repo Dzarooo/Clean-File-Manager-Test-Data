@@ -1,47 +1,74 @@
 # SZYBKIE README
 
-**1.** Najpierw skonfigurować plik .env żeby była jakakolwiek baza danych
+> [!WARNING]  
+> Aby wszystko działało poprawnie, należy skonfigurować paczkę CleanApi oraz paczkę CleanFileManager
 
-**2.** Następnie klasyczna komenda:
+## Szybki poradnik co zrobić aby ten projekt w ogóle działał
+
+najpierw puścić komendy `composer install` i `composer update`
+
+Następnie dodać do `composer.json` takowe linijki:
+```php
+"repositories": [
+    {
+        "type": "vcs",
+        "url": "https://github.com/CleanScripts/cleanapi.git"
+    },
+],
+"require": {
+    "cleanscripts/cleanapi": "^1.0"
+}
 ```
-composer install
+i puścić komendę:
+```
+composer update CleanScripts/CleanApi
 ```
 
-**3.** Zainstalować paczkę:
+Następnie dodać kolejne linijki do composer.json:
+```php
+"repositories" : [
+    {
+        "type": "path",
+        "url": "packages/CleanScripts/CleanFileManager",
+        "options": {
+            "symlink": true
+        }
+    }
+]
+"require": {
+    "cleanscripts/cleanfilemanager"
+}
 ```
-composer update CleanScripts\CleanApi
+i puścić komendę:
+```
+composer update CleanScripts/CleanFileManager
 ```
 
-**4.** i jeszcze jedną paczkę:
-```
-composer update CleanScripts\CleanFileManager
+następnie dodac providersów w `bootstrap/providers.php`:
+```php
+return [
+    Cleanscripts\CleanApi\Rest\Providers\MacroServiceProvider::class,
+    Cleanscripts\CleanApi\Rest\Providers\ModuleServiceProvider::class,
+    CleanScripts\CleanFileManager\CleanFileManagerServiceProvider::class,
+    Owenoj\LaravelGetId3\GetId3ServiceProvider::class,
+]
 ```
 
-**5.** Nie wiem w którym miejscu i czy w ogóle będzie potrzebne, ale polecam użyć tych komend na "zaś":
+dla pewności można puścić zestaw kilku komend:
 ```
-composer dump-autoload
 composer update
-php artisan route:clear
+composer dump-autoload
 php artisan cache:clear
+php artisan route:clear
 ```
 
-**6.** A dla pewności można użyc tej komendy i zobaczyć czy jest więcej route'ów niż tylko defaultowe:
-```
-php artisan route:list
-```
-
-**7.** W teorii config powinien już być ale nie zaszkodzi spróbować go opublicznić:
+opublikować config dla cleanfilemanager:
 ```php
 php artisan vendor:publish
-//z listy która się wyświetli wybrać CleanScripts\CleanFileManager\CleanFileManagerServiceProvider
+//wybrać z listy CleanScripts\CleanFileManager\CleanFileManagerServiceProvider
 ```
 
-**8.** Providery są już dodane więc nie powinno być z nimi problemu.
 
-**9.** Na końcu wprowadzić migracje <ins>Z SEEDEREM</ins> (seeder wprowadza domyślnego użytkownika do [forceLoginu](#routey))
-```
-php artisan migrate:fresh --seed
-```
 
 ### TROCHĘ OPISU
 W modułach znadują się wszystkie modele, kontrolery i viewsy:
@@ -59,3 +86,11 @@ PRAWIE Wszystkie routey są w modułach, ale niektóre są w domyślnym pliku la
 - `POST` forceLogin - login był kiedyś potrzebny żeby dodać jakikolwiek plik więc na szybko stworzyłem routea który po prostu logował użytkownika stworzonego w seederze
 - `POST` logout - ta sama przyczyna co forceLogin
 - `GET` / - domyślny route którzy przenosi na view home.blade.php
+
+#### Komendy do tinkera
+Żeby podejrzeć zawartości tablic poprzez modele, podano dokładne ścieżki do modeli poniżej:
+- File: `CleanScripts\CleanFileManager\Models\File`
+- Document: `App\Modules\Document\Models\Document`
+- Image: `App\Modules\Image\Models\Image`
+- Invoice: `App\Modules\Invoice\Models\Invoice`
+- Report: `App\Modules\Report\Models\Report`
