@@ -56,6 +56,6 @@ W modułach znadują się wszystkie modele, kontrolery i viewsy:
 #### Routey
 
 PRAWIE Wszystkie routey są w modułach, ale niektóre są w domyślnym pliku laravela:
-- forceLogin - login był kiedyś potrzebny żeby dodać jakikolwiek plik więc na szybko stworzyłem routea który po prostu logował użytkownika stworzonego w seederze
-- logout - ta sama przyczyna co forceLogin
-- / - domyślny route którzy przenosi na view home.blade.php
+- `POST` forceLogin - login był kiedyś potrzebny żeby dodać jakikolwiek plik więc na szybko stworzyłem routea który po prostu logował użytkownika stworzonego w seederze
+- `POST` logout - ta sama przyczyna co forceLogin
+- `GET` / - domyślny route którzy przenosi na view home.blade.php
