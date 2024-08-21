@@ -1,7 +1,7 @@
 # SZYBKIE README
 
 > [!WARNING]  
-> Aby wszystko działało poprawnie, należy skonfigurować paczkę CleanApi oraz paczkę CleanFileManager
+> Przed zaczęciem konfiguracji, należy pobrać paczkę [CleanFileManager](https://github.com/CleanScripts/CleanFileManager) oraz umieścić ją w podanej ścieżce: `packages/CleanScripts/CleanFileManager/{zawartość paczki}`
 
 ## Szybki poradnik co zrobić aby ten projekt w ogóle działał
 
@@ -13,7 +13,7 @@ Następnie dodać do `composer.json` takowe linijki:
     {
         "type": "vcs",
         "url": "https://github.com/CleanScripts/cleanapi.git"
-    },
+    }
 ],
 "require": {
     "cleanscripts/cleanapi": "^1.0"
@@ -36,7 +36,7 @@ Następnie dodać kolejne linijki do composer.json:
     }
 ]
 "require": {
-    "cleanscripts/cleanfilemanager"
+    "cleanscripts/cleanfilemanager": "dev-main"
 }
 ```
 i puścić komendę:
