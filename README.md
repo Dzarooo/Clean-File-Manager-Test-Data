@@ -30,4 +30,10 @@ php artisan cache:clear
 php artisan route:list
 ```
 
-**7.** Providery są już dodane więc nie powinno być z nimi problemu.
+**7.** W teorii config powinien już być ale nie zaszkodzi spróbować go opublicznić:
+```php
+php artisan vendor:publish
+//z listy która się wyświetli wybrać CleanScripts\CleanFileManager\CleanFileManagerServiceProvider
+```
+
+**8.** Providery są już dodane więc nie powinno być z nimi problemu.
