@@ -187,7 +187,7 @@
             <form action="{{ route('image.store.directory') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
-                <input type="text" name="name" placeholder="Directory name">
+                <input type="text" name="dir_name" placeholder="Directory name">
                 <br><br>
 
                 <select name="model">
