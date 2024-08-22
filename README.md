@@ -62,16 +62,22 @@ php artisan cache:clear
 php artisan route:clear
 ```
 
-opublikować config dla cleanfilemanager:
+opublikować config dla CleanApi oraz CleanFileManager:
 ```php
 php artisan vendor:publish
 //wybrać z listy CleanScripts\CleanFileManager\CleanFileManagerServiceProvider
 ```
 
+Może być potrzeba zainstalowania paczek npm'a albo stworzenia vite manifestu. Jeśli takowa nastąpi, należy puścić następujące komendy:
+```
+npm install
+npm run build
+```
+
 
 
 ### TROCHĘ OPISU
-W modułach znadują się wszystkie modele, kontrolery i viewsy:
+W modułach (`App/Modules`) znadują się wszystkie modele, kontrolery i viewsy:
 - Home
 - Document
 - Image
@@ -94,3 +100,63 @@ PRAWIE Wszystkie routey są w modułach, ale niektóre są w domyślnym pliku la
 - Image: `App\Modules\Image\Models\Image`
 - Invoice: `App\Modules\Invoice\Models\Invoice`
 - Report: `App\Modules\Report\Models\Report`
+
+Użyć mozna je do wywowyłania metod Eloquenta w tinkerze, np. `CleanScripts\CleanFileManager\Models\File::get()`
+
+#### Co jest czym?
+- Home - służy tylko i wyłącznie do wyświetlania strony testowej. Nie ma w nim niczego związanego z faktyczną paczką.
+- File - służy do zapisywania i walidacji plików oraz folderów. Zarówno pliki jak i foldery znajdują się w tablicy `files`.
+- Invoice - model, którego instancje są po prostu reprezentacją jakiegoś rekordu w bazie (Invoice nie reprezentuje pliku!). Do instancji Invoice dołącza się pliki, które są instancjami innych modeli.
+- Report - to samo co Invoice tylko inna nazwa :) .
+- Document - model, ktorego instancje reprezentują pliki. Nie może istnieć samoczynnie, musi byc załączony albo do `Invoice` albo `Report`. Jego dane zapisują się do dwóch tabel: `documents` zapisuje dane dokumentu podane przez użytkownika (np. tytuł i ilość stron), a plik (dokument) sam w sobie zapisywany jest w `files`. rekord w `documents` jest połączony foreign key do rekordu w `files`.
+
+#### Walidacja
+Reguły walidacji definiują modele Invoice i Report. Każdy model który definiuje reguły musi implementować `\CleanScripts\CleanFileManager\Interfaces\HasFiles` oraz używać `\CleanScripts\CleanFileManager\Traits\HasFilesTrait`.
+
+Skonfigurowana walidacja po pobraniu tego projektu wygląda następująco:
+- Invoice: dopuszcza tylko i wyłącznie pdf'y, ma ograniczenie wielkości plików do 2MB (domyślna wartość).
+- Report: Nie ma żadnej walidacji, przepuści wszystko (może że ktoś wrzuci plik który waży więcej niż `100000000000000` ;D )
+
+Domyślne wartości walidacji znajdują się w `packages/CleanScripts/CleanFileManager/src/Traits/HasFilesTrait`. W modelu Invoice znajduje się przykładowe nadpisanie reguły walidacji:
+
+```php
+//app/Modules/Invoice/Models/Invoice.php
+
+<?php
+
+declare(strict_types=1);
+// Model for uploading Invoices
+
+namespace App\Modules\Invoice\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+/**
+ * Class File
+ *
+ *
+ * @property int $id
+ * @property string $number
+ * @property string $title
+ * @property string $service
+ * @property float $price
+ */
+class Invoice extends Model implements \CleanScripts\CleanFileManager\Interfaces\HasFiles
+{
+    use \CleanScripts\CleanFileManager\Traits\HasFilesTrait;
+
+    protected $fillable = [
+        'number',
+        'title',
+        'service',
+        'price',
+    ];
+
+    //tu znajduje się nadpisanie reguły walidacji, dokładnie dozwolonych mimes.
+    public static function getAllowedFileMimes(): array
+    {
+        return ['pdf', 'application/pdf'];
+    }
+}
+
+```
