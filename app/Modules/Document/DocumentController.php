@@ -18,6 +18,10 @@ class DocumentController extends Controller
 {
     public function storeFile(Request $request)
     {
+        $request->merge([
+            'model_class' => Document::class,
+        ]);
+
         $doc = new Document([
             'title' => $request->title,
             'size' => $request->size,

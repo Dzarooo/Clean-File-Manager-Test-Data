@@ -285,9 +285,16 @@
                 <p>Parent id: {{ $file->parent_id }}</p>
                 <p>Fileable id: {{ $file->fileable_id }}</p>
                 <p>Fileable type: {{ $file->fileable_type }}</p>
+                <p>Hash: {{ $file->hash }}</p>
+                <p>Absolute path: {{ $file->absolutePath }}</p>
+                <p>Relative path: {{ $file->relativePath }}</p>
                 @if ($file->type == "file")
                 <p>Meta data:</p> @dump($file->meta_data)
                 @endif
+                <form action="{{ route('file.delete', ['id' => $file->id]) }}" method="POST">
+                    @csrf
+                    <input type="submit" value="Usuń">
+                </form>
             </div>
         @endforeach
         </div>

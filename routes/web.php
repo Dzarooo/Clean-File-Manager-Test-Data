@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Models\User;
+use App\Modules\File\DeleteFileController;
 use App\Modules\Home\HomeController;
 use Illuminate\Support\Facades\Route;
 
@@ -25,3 +26,9 @@ Route::post('/logout', function () {
 
     return redirect()->back();
 })->name('logout');
+
+Route::post('/file/delete/{id}', [DeleteFileController::class, 'deleteFile'])->name('file.delete');
+
+Route::get('/test', function () {
+    return view('test');
+});

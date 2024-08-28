@@ -96,12 +96,22 @@
             flex-wrap:wrap;
         }
 
+        section.dump div {
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+        }
+
         section.dump div.instancesContainer  {
             display:flex;
+            flex-direction:row;
+            flex-wrap:wrap;
+            justify-content:center;
             gap:10px;
         }
 
         section.dump .instance {
+            display: initial;
             padding:20px;
             border:solid 1px grey;
             border-radius:10px;

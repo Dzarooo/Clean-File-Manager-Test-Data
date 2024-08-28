@@ -18,6 +18,10 @@ class ImageController extends Controller
 {
     public function storeFile(Request $request)
     {
+        $request->merge([
+            'model_class' => Image::class,
+        ]);
+
         $img = new Image([
             'title' => $request->title,
             'resolution' => $request->resolution,
